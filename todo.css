@@ -26,10 +26,10 @@ Variables
   --clr-primary-9: hsl(205, 90%, 88%);
   --clr-primary-10: hsl(205, 100%, 96%);
   /* darkest grey - used for headings */
-  --clr-grey-1: hsl(209, 61%, 16%);
-  --clr-grey-2: hsl(211, 39%, 23%);
-  --clr-grey-3: hsl(209, 34%, 30%);
-  --clr-grey-4: hsl(209, 28%, 39%);
+  --clr-green-1: hsl(145, 53%, 37%);
+  --clr-green-2:hsl(146, 32%, 38%);
+  --clr-green-3: hsl(145, 40%, 47%);
+  --clr-green-4: hsl(145, 23%, 49%);
   /* grey used for paragraphs */
   --clr-grey-5: hsl(210, 22%, 49%);
   --clr-grey-6: hsl(209, 23%, 60%);
@@ -68,7 +68,7 @@ Global Styles
 }
 body {
   font-family: var(--ff-secondary);
-  background: rgb(52, 99, 52);
+  background: rgb(44, 100, 44);
   color: var(--clr-grey-1);
   line-height: 1.5;
   font-size: 0.875rem;
@@ -165,6 +165,7 @@ p {
   margin: 0 auto;
   max-width: 35rem;
   margin-top: 8rem;
+  
 }
 @media screen and (min-width: 992px) {
   .section-center {
@@ -182,7 +183,7 @@ Grocery List
 ===============
 */
 .section-center {
-  background: var(--clr-white);
+  background: var(--clr-green-2);
   border-radius: var(--radius);
   box-shadow: var(--light-shadow);
   transition: var(--transition);
@@ -191,13 +192,14 @@ Grocery List
 .section-center:hover {
   box-shadow: var(--dark-shadow);
 }
+
 .alert {
-  margin-bottom: 1rem;
-  height: 1.25rem;
+  margin-bottom: 3rem;
+  height: 1.5rem;
   display: grid;
   align-items: center;
   text-align: center;
-  font-size: 0.7rem;
+  font-size: 1rem;
   border-radius: 0.25rem;
   letter-spacing: var(--spacing);
   text-transform: capitalize;
@@ -210,16 +212,23 @@ Grocery List
   color: #155724;
   background: #d4edda;
 }
-.grocery-form h3 {
+
+.todo-form h3 {
   color: var(--clr-black);
-  margin-bottom: 1.5rem;
+  margin-bottom: 2.5rem;
   text-align: center;
+  margin-top: 0.5rem;
+  /* border: 1px solid black; */
+  border-radius: 5px;
+  background-color: var(--clr-grey-4);
+  padding: 0.5rem;
+  color: white;
 }
 .form-control {
   display: flex;
   justify-content: center;
 }
-#grocery {
+#todo {
   padding: 0.25rem;
   padding-left: 1rem;
   background: var(--clr-grey-10);
@@ -229,8 +238,9 @@ Grocery List
   font-size: 1rem;
   flex: 1 0 auto;
   color: var(--clr-grey-5);
+  border: 2px solid black;
 }
-#grocery::placeholder {
+#todo::placeholder {
   font-family: var(--ff-secondary);
   color: var(--clr-grey-5);
 }
@@ -249,13 +259,14 @@ Grocery List
   content: var(--clr-primary-5);
   transition: var(--transition);
   font-size: 0.85rem;
+  border: 2px solid black;
 }
 .submit-btn:hover {
   background: var(--clr-green-dark);
   color: var(--clr-white);
 }
 
-.grocery-container {
+.todo-container {
   margin-top: 2rem;
   transition: var(--transition);
   visibility: hidden;
@@ -263,7 +274,7 @@ Grocery List
 .show-container {
   visibility: visible;
 }
-.grocery-item {
+.todo-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -272,12 +283,15 @@ Grocery List
   padding: 0.25rem 1rem;
   border-radius: var(--radius);
   text-transform: capitalize;
-}
-.grocery-item:hover {
-  color: var(--clr-grey-5);
+  border: 2px solid black;
+  color: black;
   background: var(--clr-grey-10);
 }
-.grocery-item:hover .title {
+.todo-item:hover {
+  /* color: black; */
+  background: var(--clr-green-1);
+}
+.todo-item:hover .title {
   color: var(--clr-grey-5);
 }
 .title {
