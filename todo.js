@@ -17,8 +17,10 @@ let editID = "";
 // 1.submit
 form.addEventListener("submit", addItem);
 
-// 2.delete item
-clearBtn.addEventListener('click', clearItems);
+// 2.clear item
+clearBtn.addEventListener("click", clearItems);
+
+// 3. delete btn
 
 // FUNCTIONS
 
@@ -48,8 +50,16 @@ function addItem(e) {
     </div>
     `;
 
+    // delete button
+    const deleteBtn = element.querySelector(".delete-btn");
+    deleteBtn.addEventListener("click", deleteItem);
+
+    //edit button
+    const editBtn = element.querySelector(".edit-btn");
+    editBtn.addEventListener("click", editItem);
+
     // append child
-    list.appendChild(element);// idudugtong mo na tong list dun sa element na ginawa mo na target ay yung article
+    list.appendChild(element); // idudugtong mo na tong list dun sa element na ginawa mo na target ay yung article
 
     // displayAlert
     displayAlert("Item added to the list", "success");
@@ -57,21 +67,26 @@ function addItem(e) {
     // show container
     container.classList.add("show-container");
 
-
     // add to local storage
     addToLocalStorage(id, value);
 
     // setback to default
     setBackToDefault();
   } else if (value && editFlag) {
+    editElement.innerHTML = value;
+    displayAlert("value changed", "success");
     console.log("editing");
+
+    //edit local storage
+    editLocalStorage(editID, value);
+    setBackToDefault();
   } else {
     displayAlert("Please enter Value", "danger");
     console.log("no value");
   }
 }
 
-// DISPLAY ALERT FUNCTION
+// 2. DISPLAY ALERT FUNCTION
 function displayAlert(text, action) {
   // display alert
   alert.textContent = text;
@@ -84,17 +99,128 @@ function displayAlert(text, action) {
   }, 1500);
 }
 
+// 3. CLEAR ITEM FUNCTION
+function clearItems() {
+  console.log("clear this");
+  const items = document.querySelectorAll(".todo-item");
 
-// SET BACK TO DEFAULT
-function setBackToDefault(){
-    grocery.value = "";
-    editFlag = false;
-    editID = "";
-    submitBtn.textContent = "submit";
-    console.log("added to local storage");
+  if (items.length > 0) {
+    items.forEach(function (item) {
+      list.removeChild(item);
+    });
+
+    // remove container
+    container.classList.remove("show-container");
+
+    // display alert
+    displayAlert("List is cleared", "danger");
+
+    // setback to default
+    setBackToDefault();
+
+    // remove from local storage
+    localStorage.removeItem("list");
+  }
+}
+
+// 4. DELETE FUNCTION
+function deleteItem(e) {
+  const element = e.currentTarget.parentElement.parentElement; //tinarget yung todo-item at nilagay sa var na element
+
+  const id = element.dataset.id; //tinarget yung data-id nung item
+
+  list.removeChild(element);
+  console.log("DELETED");
+
+  // remove show-container dun sa todo-container
+  if (list.children.length === 0) {
+    container.classList.remove("show-container"); //kapag zero na ang list, remove container na
+  }
+
+  displayAlert("Item deleted", "danger"); //then display tong alert na to
+
+  setBackToDefault(); //balik ulit sa default na empty
+
+  removeFromLocalStorage(id); //then iremove din yung item sa localstorage
+}
+
+// 5. EDIT/UPDATE FUNCTION
+function editItem(e) {
+  const element = e.currentTarget.parentElement.parentElement; //tinarget ulit yung grocery-item at ginawa syang laman ng element
+
+  //set edit item
+  editElement = e.currentTarget.parentElement.previousElementSibling; // tinarget naman dito yung btn container na parentelement tapos yung p tag na  "title" as previous element sibling
+
+  //set form value
+  todo.value = editElement.innerHTML; //kasi nga ieedit mo yung loob ng html
+
+  editFlag = true; //true sya kasi nageedit ka
+
+  editID = element.dataset.id; //maeedit din yung dataset id nung item
+
+  submitBtn.textContent = "edit"; // mababago yung text content nung submitbtn, magiging edit siya
+  console.log("UPDATED");
+}
+
+//6. SET BACK TO DEFAULT FUNCTIONS
+function setBackToDefault() {
+  todo.value = "";
+  editFlag = false;
+  editID = "";
+  submitBtn.textContent = "submit";
 }
 
 // LOCAL STORAGE
-function addToLocalStorage(id, value){
-    console.log("added to local storage")
+
+// 1. add to local storage
+function addToLocalStorage(id, value) {
+  const todo = { id, value };
+
+  let items = getLocalStorage(); // setting the value of items sa kung ano ang meron sa getLocalStorage
+
+  items.push(todo); // dagdag mo yung grocery sa items, item is yung laman ng getlocalstorage.magiging part na ng array yung dinagdag mo.
+
+  localStorage.setItem("list", JSON.stringify(items)); //naka-array yung laman ng list kaya iko-convert sya sa string kasi di pwede na array laman ng localStorage
+  console.log("added to local storage");
+  console.log(items);
+}
+
+//2. getlocalstorage
+function getLocalStorage() {
+  return localStorage.getItem("list")
+    ? JSON.parse(localStorage.getItem("list"))
+    : []; // kunin yung laman ng localstorage then iconvert sya as object; pag walang laman yung local storage, empty array lang ang lalabas
+}
+
+// 2. remove to local storage
+function removeFromLocalStorage(id) {
+  let items = getLocalStorage();
+
+  items = items.filter(function (item) {
+    if (item.id !== id) {
+      //It filters the array of items by creating a new array that contains only the items whose id does not match the provided id.
+      return item;
+    }
+  });
+  localStorage.setItem("list", JSON.stringify(items));
+
+  console.log(items);
+  console.log("delete from local storage");
+}
+
+// 3. edit local storage
+function editLocalStorage(id, value) {
+  let items = getLocalStorage();
+  items = items.map(function (item) {
+    //It maps the array of items to a new array, where each item is modified if its id matches the provided id. 
+    if (item.id === id) {
+      item.value = value;
+    } 
+    //If the id matches, the function updates the value property of the item to the provided value. If the id does not match, the function returns the original item.
+    return item;
+  });
+  localStorage.setItem("list", JSON.stringify(items));
+
+  console.log(items);
+  console.log("edit local storage");
 }
