@@ -20,7 +20,8 @@ form.addEventListener("submit", addItem);
 // 2.clear item
 clearBtn.addEventListener("click", clearItems);
 
-// 3. delete btn
+// 3. load items
+window.addEventListener("DOMContentLoaded", setupItems);
 
 // FUNCTIONS
 
@@ -31,35 +32,7 @@ function addItem(e) {
 
   const id = new Date().getTime().toString();
   if (value && !editFlag) {
-    const element = document.createElement("article");
-    // add class
-    element.classList.add("todo-item");
-    // add id
-    const attr = document.createAttribute("data-id");
-    attr.value = id;
-    element.setAttributeNode(attr);
-    // put the element here
-    element.innerHTML = `<p class="title">${value}</p>
-    <div class="btn-container">
-        <button type="button" class="edit-btn">
-            <i class="fas fa-edit"></i>
-        </button>
-        <button type="button" class="delete-btn">
-            <i class="fas fa-trash"></i>
-        </button>
-    </div>
-    `;
-
-    // delete button
-    const deleteBtn = element.querySelector(".delete-btn");
-    deleteBtn.addEventListener("click", deleteItem);
-
-    //edit button
-    const editBtn = element.querySelector(".edit-btn");
-    editBtn.addEventListener("click", editItem);
-
-    // append child
-    list.appendChild(element); // idudugtong mo na tong list dun sa element na ginawa mo na target ay yung article
+    createListItem(id, value);
 
     // displayAlert
     displayAlert("Item added to the list", "success");
@@ -212,10 +185,10 @@ function removeFromLocalStorage(id) {
 function editLocalStorage(id, value) {
   let items = getLocalStorage();
   items = items.map(function (item) {
-    //It maps the array of items to a new array, where each item is modified if its id matches the provided id. 
+    //It maps the array of items to a new array, where each item is modified if its id matches the provided id.
     if (item.id === id) {
       item.value = value;
-    } 
+    }
     //If the id matches, the function updates the value property of the item to the provided value. If the id does not match, the function returns the original item.
     return item;
   });
@@ -223,4 +196,48 @@ function editLocalStorage(id, value) {
 
   console.log(items);
   console.log("edit local storage");
+}
+
+//set-up items
+function setupItems() {
+  // this function ay yung process ng paggawa ng items ulit. at kahit ireload mo, nandun pa rin yung items sa ui at localstorge
+  let items = getLocalStorage();
+
+  if (items.length > 0) {
+    items.forEach(function (item) {
+      createListItem(item.id, item.value);
+    });  //hanggat may item sa locastorage, may item pa rin dun sa ui. nandun pa din yung createlistitem which is ang function ay ilagay yung item sa container 
+    container.classList.add("show-container");
+  } //It adds the class "show-container" to an element with the container variable
+}
+
+function createListItem(id, value) {
+  //this function is the template /structure kapag gagawa ka ulit ng items.
+  const element = document.createElement("article");
+  // add id
+  let attr = document.createAttribute("data-id");
+  attr.value = id;
+  element.setAttributeNode(attr);
+  //add class
+  element.classList.add("todo-item");
+  element.innerHTML = `<p class="title">${value}</p>
+                <div class="btn-container">
+                    <button type="button" class="edit-btn">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button type="button" class="delete-btn">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>`;
+
+  //deletebtn
+  const deleteBtn = element.querySelector(".delete-btn");
+  deleteBtn.addEventListener("click", deleteItem);
+
+  //editbtn
+  const editBtn = element.querySelector(".edit-btn");
+  editBtn.addEventListener("click", editItem);
+
+  // append child
+  list.appendChild(element);
 }
