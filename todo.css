@@ -30,6 +30,7 @@ Variables
   --clr-green-2:hsl(146, 32%, 38%);
   --clr-green-3: hsl(145, 40%, 47%);
   --clr-green-4: hsl(145, 23%, 49%);
+  --clr-green-5: hsl(146, 32%, 70%);
   /* grey used for paragraphs */
   --clr-grey-5: hsl(210, 22%, 49%);
   --clr-grey-6: hsl(209, 23%, 60%);
@@ -179,7 +180,7 @@ main {
 }
 /*
 =============== 
-Grocery List
+Todo List
 ===============
 */
 .section-center {
@@ -188,6 +189,7 @@ Grocery List
   box-shadow: var(--light-shadow);
   transition: var(--transition);
   padding: 2rem;
+  border: 2px solid black;
 }
 .section-center:hover {
   box-shadow: var(--dark-shadow);
@@ -287,13 +289,7 @@ Grocery List
   color: black;
   background: var(--clr-grey-10);
 }
-.todo-item:hover {
-  /* color: black; */
-  background: var(--clr-green-1);
-}
-.todo-item:hover .title {
-  color: var(--clr-grey-5);
-}
+
 .title {
   margin-bottom: 0;
   color: var(--clr-grey-1);
@@ -327,16 +323,19 @@ Grocery List
   height: 1.5rem;
   display: grid;
   align-items: center;
-  background: transparent;
+  background: var(--clr-red-dark);
   border-color: transparent;
-  color: var(--clr-red-light);
+  color: black;
   margin: 0 auto;
   font-size: 0.85rem;
   letter-spacing: var(--spacing);
   cursor: pointer;
   transition: var(--transition);
   margin-top: 1.25rem;
+  border: 2px solid black;
+  border-radius: 5px;
 }
 .clear-btn:hover {
-  color: var(--clr-red-dark);
+  color: black;
+  background-color: var(--clr-red-light);
 }
